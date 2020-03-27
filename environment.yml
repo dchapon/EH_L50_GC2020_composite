@@ -1,0 +1,11 @@
+name: example-environment
+channels:
+  - conda-forge
+dependencies:
+  - numpy
+  - matplotlib
+  - ipykernel
+  - ipywidgets
+  - notebook>=4.2
+  - python=3.6
+  - Pillow
