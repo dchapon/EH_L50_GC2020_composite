@@ -2,6 +2,7 @@
 import numpy as N
 from PIL import Image
 from matplotlib import pyplot as P
+from colormaps import CustomColormaps
 
 
 def value_range(arr, drop_percentile=1.0):
@@ -15,7 +16,7 @@ def value_range(arr, drop_percentile=1.0):
 
 
 def pil_img(a, lamin, cmap_name):
-    cmap = P.cm.get_cmap(cmap_name)
+    cmap = CustomColormaps.get_cmap(cmap_name)
     la = N.log10(a.T)
     la[la<lamin] = lamin
     lamax = la.max()
