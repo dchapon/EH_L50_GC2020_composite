@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
-
+import numpy as N
+from matplotlib import pyplot as P
 from matplotlib import cm
 from matplotlib.colors import Colormap, LinearSegmentedColormap
 
@@ -523,7 +524,7 @@ custom_cmaps = {"BlackBlueWhiteRed": LinearSegmentedColormap('BlackBlueWhiteRed'
                 "BlueYellowTanager": LinearSegmentedColormap('BlueYellowTanager', _cdict_BlackBlueGreenYellow, 512),
                 "BlackPurpWhiBlGreen": LinearSegmentedColormap('BlackPurpWhiBlGreen', _cdict_BlackPurplWhitBlGreen, 512),
                 "Dark_thermal": LinearSegmentedColormap('Dark_thermal', _cdict_dark_thermal, 512),
-                'Viridis_dark': LinearSegmentedColormap.from_list('Viridis_dark', _viridis_dark_data),
+                "Viridis_dark": LinearSegmentedColormap.from_list('Viridis_dark', _viridis_dark_data),
                 "JetBlack": LinearSegmentedColormap('JetBlack', _jet_black_cdict, 512),
                 "WhiteBlueYellow": LinearSegmentedColormap("WhiteBlueYellow", _cdict_WhiBlueYellow, 512),
                 "Dark_green": LinearSegmentedColormap("Dark_green", _cdict_dark_Green, 512)
@@ -559,6 +560,35 @@ class CustomColormaps(object):
                         "matplotlib colormaps :\n%s" % (cmap, list(custom_cmaps.keys()),
                                                         list(cm.cmap_d.keys())))
         return colormap
+
+    @classmethod
+    def show_colormaps(cls, cm_list=None, sort=True):
+        cml = cls.cmap_list()
+        if cm_list is not None:
+            cml = [cm for cm in cm_list if cm in cml]
+        if sort:
+            cml.sort()
+
+        nrows = len(cml)
+        gradient = N.linspace(0, 1, 256)
+        gradient = N.vstack((gradient, gradient))
+
+        fig, axes = P.subplots(nrows=nrows)
+        fig.subplots_adjust(top=0.95, bottom=0.01, left=0.2, right=0.99)
+        axes[0].set_title("Colormaps", fontsize=14)
+
+        for ax, name in zip(axes, cml):
+            ax.imshow(gradient, aspect='auto', cmap=cls.get_cmap(name))
+            pos = list(ax.get_position().bounds)
+            x_text = pos[0] - 0.01
+            y_text = pos[1] + pos[3] / 2.
+            fig.text(x_text, y_text, name, va='center', ha='right', fontsize=10)
+
+        # Turn off *all* ticks & spines, not just the ones with colormaps.
+        for ax in axes:
+            ax.set_axis_off()
+
+        P.show()
 
 
 __all__ = ["CustomColormaps"]
